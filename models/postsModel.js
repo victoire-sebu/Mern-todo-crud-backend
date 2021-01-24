@@ -5,11 +5,9 @@ const PostsModel = mongoose.model(
   {
     author: {
       typpe: String,
-      
     },
     message: {
       type: String,
-      
     },
     date: {
       type: Date,

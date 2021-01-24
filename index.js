@@ -1,7 +1,10 @@
+const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 const PORT = 5500;
-
+const mongoose = require("mongoose");
+const cors = require("cors");
+mongoose.set("useFindAndModify", false);
 
 //call db
 require("./models/dbconfig");
@@ -9,8 +12,11 @@ require("./models/dbconfig");
 //call route
 const postsRoutes = require("./routes/postsController");
 
-//middleware, here is a fonction to lissen that oruut /
-app.use("/", postsRoutes);
+//middleware
+
+app.use(bodyParser.json()); //past element in json
+app.use(cors());
+app.use("/posts", postsRoutes); //for fech elements in db
 
 //connect to server
 app.listen(PORT, () => console.log("Server started on port : " + PORT));
