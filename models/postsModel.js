@@ -1,20 +1,22 @@
 const mongoose = require("mongoose");
 
 const PostsModel = mongoose.model(
-  "backend-node", //name of database
+  "todos", //name of database
   {
-    author: {
-      typpe: String,
-    },
-    message: {
+    todo_description: {
       type: String,
     },
-    date: {
-      type: Date,
-      default: Date.now,
+    todo_responsible: {
+      type: String,
+    },
+    todo_priority: {
+      type: String,
+    },
+    todo_completed: {
+      type: Boolean,
     },
   },
-  "posts" //name of table
+  "todos" //name of table
 );
 
 module.exports = { PostsModel }; //that is for export model where will need to call it on the app

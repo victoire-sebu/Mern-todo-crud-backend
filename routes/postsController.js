@@ -13,10 +13,14 @@ router.get("/", (req, res) => {
 });
 
 //add element
-router.post("/", (req, res) => {
+router.post("/add", (req, res) => {
   const newReccord = new PostsModel({
-    author: req.body.author,
-    message: req.body.message,
+    // author: req.body.author,
+    // message: req.body.message,
+    todo_description: req.body.todo_description,
+    todo_responsible: req.body.todo_responsible,
+    todo_priority: req.body.todo_priority,
+    todo_completed: req.body.todo_completed,
   });
 
   newReccord.save((err, docs) => {
@@ -25,14 +29,24 @@ router.post("/", (req, res) => {
   });
 });
 
+//find by ID
+router.get("/:id", (req, res) => {
+  let id = req.params.id;
+  PostsModel.findById(id, function (err, todo) {
+    res.json(todo);
+  });
+});
+
 //update emlements
-router.put("/:id", (req, res) => {
+router.put("/update/:id", (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknow : " + req.params.id);
 
   const updateRecord = {
-    author: req.body.author,
-    message: req.body.message,
+    todo_description: req.body.todo_description,
+    todo_responsible: req.body.todo_responsible,
+    todo_priority: req.body.todo_priority,
+    todo_completed: req.body.todo_completed,
   };
 
   PostsModel.findByIdAndUpdate(
@@ -47,7 +61,7 @@ router.put("/:id", (req, res) => {
 });
 
 //delete
-router.delete("/:id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknow : " + req.params.id);
 
