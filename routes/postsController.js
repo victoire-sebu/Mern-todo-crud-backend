@@ -32,32 +32,32 @@ router.post("/add", (req, res) => {
 //find by ID
 router.get("/:id", (req, res) => {
   let id = req.params.id;
-  PostsModel.findById(id, function (err, todo) {
-    res.json(todo);
+  PostsModel.findById(id, function (err, docs) {
+    res.json(docs);
   });
 });
 
 //update emlements
-router.put("/update/:id", (req, res) => {
-  if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknow : " + req.params.id);
+router.route("/update/:id").post(function (req, res) {
+  PostsModel.findById(req.params.id, function (err, docs) {
+    if (!docs) {
+      res.status(400).send("ID unknow : " + req.params.id);
+    } else {
+      docs.todo_description = req.body.todo_description;
+      docs.todo_responsible = req.body.todo_responsible;
+      docs.todo_priority = req.body.todo_priority;
+      docs.todo_completed = req.body.todo_completed;
 
-  const updateRecord = {
-    todo_description: req.body.todo_description,
-    todo_responsible: req.body.todo_responsible,
-    todo_priority: req.body.todo_priority,
-    todo_completed: req.body.todo_completed,
-  };
-
-  PostsModel.findByIdAndUpdate(
-    req.params.id,
-    { $set: updateRecord },
-    { new: true },
-    (err, docs) => {
-      if (!err) res.send(docs);
-      else console.log("Update error: " + err);
+      docs
+        .save()
+        .then((docs) => {
+          res.json("Todo Updated");
+        })
+        .catch((err) => {
+          res.status(400).send("Update not possible");
+        });
     }
-  );
+  });
 });
 
 //delete
